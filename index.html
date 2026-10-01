@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quick Suite | QR코드 생성기 & URL 단축기</title>
+  <meta name="description" content="QR 코드 생성과 링크 단축을 한번에! 스마트 링크 유틸리티 허브 Quick Suite입니다.">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-main: #fcf9f2;
+      --bg-gradient: radial-gradient(circle at 50% -10%, #fffbeb 0%, #fef7e6 45%, #f7f0e1 100%);
+      
+      --primary-color: #f59e0b;
+      --primary-hover: #d97706;
+      --primary-glow: rgba(245, 158, 11, 0.35);
+      
+      --secondary-color: #fbbf24;
+      --accent-orange: #ea580c;
+      
+      --card-bg: rgba(255, 255, 255, 0.94);
+      --card-border: rgba(245, 158, 11, 0.2);
+      --card-border-hover: rgba(245, 158, 11, 0.5);
+      
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --text-dim: #94a3b8;
+      
+      --radius-xl: 24px;
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --radius-pill: 9999px;
+      
+      --transition-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg-main);
+      background-image: var(--bg-gradient);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 배경 앰비언트 글로우 오브 */
+    .bg-glow {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(130px);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.65;
+      animation: floatOrb 20s ease-in-out infinite alternate;
+    }
+
+    .bg-glow-1 {
+      width: 550px;
+      height: 550px;
+      background: radial-gradient(circle, rgba(251, 191, 36, 0.45) 0%, transparent 70%);
+      top: -100px;
+      left: 15%;
+    }
+
+    .bg-glow-2 {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(249, 115, 22, 0.3) 0%, transparent 70%);
+      bottom: -60px;
+      right: 15%;
+      animation-duration: 24s;
+    }
+
+    @keyframes floatOrb {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(30px, 20px) scale(1.08); }
+      100% { transform: translate(-20px, -15px) scale(0.96); }
+    }
+
+    /* 헤더 */
+    .app-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 76px;
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(245, 158, 11, 0.15);
+      box-shadow: 0 4px 20px -2px rgba(245, 158, 11, 0.06);
+      z-index: 100;
+    }
+
+    .logo-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.2s ease;
+    }
+
+    .logo-wrapper:hover {
+      transform: translateY(-1px);
+    }
+
+    .logo-img {
+      height: 44px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 6px rgba(245, 158, 11, 0.25));
+    }
+
+    .logo-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #1e293b;
+    }
+
+    .logo-badge {
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      background: linear-gradient(135deg, #f59e0b, #ea580c);
+      color: #fff;
+      border-radius: var(--radius-pill);
+      letter-spacing: 0.04em;
+    }
+
+    /* 헤더 네비게이션 버튼 (1번 요구사항: 'QR코드' 버튼과 'URL단축' 버튼) */
+    .header-nav {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-nav {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 20px;
+      font-size: 0.94rem;
+      font-weight: 700;
+      text-decoration: none;
+      border-radius: var(--radius-pill);
+      transition: all 0.25s var(--transition-smooth);
+    }
+
+    .btn-nav-qr {
+      background: #ffffff;
+      color: #b45309;
+      border: 1.5px solid rgba(245, 158, 11, 0.35);
+      box-shadow: 0 2px 8px rgba(245, 158, 11, 0.08);
+    }
+
+    .btn-nav-qr:hover {
+      background: #fffbeb;
+      border-color: #f59e0b;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15);
+    }
+
+    .btn-nav-short {
+      background: linear-gradient(135deg, #f59e0b, #ea580c);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
+    }
+
+    .btn-nav-short:hover {
+      filter: brightness(1.06);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(245, 158, 11, 0.45);
+    }
+
+    /* 메인 컨테이너 */
+    .main-container {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      width: 100%;
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 130px 24px 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hero-box {
+      text-align: center;
+      max-width: 680px;
+      margin-bottom: 48px;
+      animation: fadeInDown 0.7s var(--transition-smooth);
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 18px;
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.25);
+      border-radius: var(--radius-pill);
+      color: #b45309;
+      font-size: 0.88rem;
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    .main-heading {
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.03em;
+      line-height: 1.25;
+      margin-bottom: 16px;
+    }
+
+    .main-heading span {
+      background: linear-gradient(135deg, #f59e0b, #ea580c);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .sub-heading {
+      font-size: 1.15rem;
+      color: #64748b;
+      line-height: 1.6;
+    }
+
+    /* 2개 서비스 카드 그리드 */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 28px;
+      width: 100%;
+      margin-bottom: 50px;
+      animation: fadeInUp 0.8s var(--transition-smooth);
+    }
+
+    .service-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      border: 1.5px solid var(--card-border);
+      border-radius: var(--radius-xl);
+      padding: 36px 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 16px 36px -10px rgba(245, 158, 11, 0.1),
+                  0 2px 6px rgba(0, 0, 0, 0.04);
+      transition: all 0.3s var(--transition-smooth);
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(90deg, #f59e0b, #ea580c);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .service-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--card-border-hover);
+      box-shadow: 0 24px 48px -12px rgba(245, 158, 11, 0.2);
+    }
+
+    .service-card:hover::before {
+      opacity: 1;
+    }
+
+    .card-top {
+      margin-bottom: 28px;
+    }
+
+    .card-icon-box {
+      width: 64px;
+      height: 64px;
+      border-radius: var(--radius-lg);
+      background: #fffbeb;
+      border: 1.5px solid rgba(245, 158, 11, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #d97706;
+      margin-bottom: 20px;
+      transition: transform 0.3s var(--transition-smooth);
+    }
+
+    .service-card:hover .card-icon-box {
+      transform: scale(1.08) rotate(3deg);
+      background: linear-gradient(135deg, #f59e0b, #ea580c);
+      color: #ffffff;
+      border-color: transparent;
+    }
+
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
+    }
+
+    .card-desc {
+      font-size: 0.98rem;
+      color: #64748b;
+      line-height: 1.6;
+    }
+
+    .features-list {
+      list-style: none;
+      margin: 18px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .features-list li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      color: #475569;
+      font-weight: 600;
+    }
+
+    .features-list li svg {
+      color: #10b981;
+      flex-shrink: 0;
+    }
+
+    .card-btn {
+      width: 100%;
+      height: 52px;
+      border-radius: var(--radius-md);
+      font-size: 1rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.25s ease;
+      cursor: pointer;
+    }
+
+    .btn-card-qr {
+      background: #fff;
+      color: #b45309;
+      border: 1.5px solid rgba(245, 158, 11, 0.4);
+    }
+
+    .service-card:hover .btn-card-qr {
+      background: #f59e0b;
+      color: #fff;
+      border-color: #f59e0b;
+    }
+
+    .btn-card-short {
+      background: linear-gradient(135deg, #f59e0b, #ea580c);
+      color: #fff;
+      border: none;
+      box-shadow: 0 6px 18px rgba(245, 158, 11, 0.35);
+    }
+
+    .service-card:hover .btn-card-short {
+      filter: brightness(1.08);
+      box-shadow: 0 10px 24px rgba(245, 158, 11, 0.5);
+    }
+
+    /* 마스코트 */
+    .corgi-companion {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+      margin-top: 10px;
+      transition: transform 0.2s ease;
+    }
+
+    .corgi-companion:hover {
+      transform: translateY(-3px);
+    }
+
+    .corgi-speech-bubble {
+      position: relative;
+      background: #ffffff;
+      color: #78350f;
+      padding: 9px 18px;
+      border-radius: var(--radius-pill);
+      font-size: 0.9rem;
+      font-weight: 700;
+      box-shadow: 0 4px 16px rgba(245, 158, 11, 0.15);
+      border: 1.5px solid rgba(245, 158, 11, 0.3);
+      margin-bottom: 8px;
+    }
+
+    .corgi-speech-bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 6px solid #ffffff;
+    }
+
+    .corgi-frame {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid #ffffff;
+      box-shadow: 0 6px 18px rgba(245, 158, 11, 0.25);
+    }
+
+    .corgi-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      .app-header {
+        padding: 0 16px;
+      }
+      .services-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      .main-heading {
+        font-size: 2.1rem;
+      }
+      .main-container {
+        padding: 100px 16px 40px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+
+  <!-- 상단 헤더 -->
+  <header class="app-header">
+    <a href="index.html" class="logo-wrapper">
+      <img src="url2qr/logo.png" alt="로고" class="logo-img" onerror="this.src='urlShort/logo.png'">
+      <div class="logo-text">
+        <span class="logo-title">Quick Suite</span>
+        <span class="logo-badge">HUB</span>
+      </div>
+    </a>
+
+    <!-- 1 & 2번 요구사항: 'QR코드' 버튼과 'URL단축' 버튼 헤더 링크 -->
+    <nav class="header-nav" aria-label="메인 네비게이션">
+      <!-- 2: QR코드 버튼 클릭 시 [url2qr]폴더 index.html과 연결 -->
+      <a href="url2qr/index.html" class="btn-nav btn-nav-qr" id="btnHeaderQr">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+          <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+          <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+          <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+        </svg>
+        <span>QR코드</span>
+      </a>
+
+      <!-- 3: URL단축 버튼 클릭 시 [urlShort]폴더 index.html과 연결 -->
+      <a href="urlShort/index.html" class="btn-nav btn-nav-short" id="btnHeaderShort">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+        </svg>
+        <span>URL단축</span>
+      </a>
+    </nav>
+  </header>
+
+  <!-- 메인 본문 -->
+  <main class="main-container">
+    <section class="hero-box">
+      <div class="badge-pill">
+        ✨ 올인원 링크 솔루션
+      </div>
+      <h1 class="main-heading">
+        스마트한 링크 관리,<br>
+        <span>QR코드 & URL 단축</span>을 한번에
+      </h1>
+      <p class="sub-heading">
+        원하는 기능을 선택해 보세요. 복잡한 링크를 단축하고, 즉시 고화질 QR 코드로 변환할 수 있습니다.
+      </p>
+    </section>
+
+    <!-- 서비스 선택 카드 그리드 -->
+    <section class="services-grid" aria-label="제공 서비스 목록">
+      
+      <!-- 2: 'QR코드' 카드 및 버튼 (클릭 시 url2qr/index.html 연결) -->
+      <a href="url2qr/index.html" class="service-card" id="cardQr">
+        <div class="card-top">
+          <div class="card-icon-box">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+              <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+              <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+              <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+            </svg>
+          </div>
+          <h2 class="card-title">스마트 QR코드 생성기</h2>
+          <p class="card-desc">웹사이트, 프로필, 링크트리 등 어떤 URL도 실시간 고해상도 QR 코드로 즉시 변환합니다.</p>
+          
+          <ul class="features-list">
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              실시간 초고속 QR 코드 생성
+            </li>
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              고화질 JPG 이미지 다운로드
+            </li>
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              URL 원클릭 클립보드 복사
+            </li>
+          </ul>
+        </div>
+
+        <div class="card-btn btn-card-qr">
+          <span>QR코드 생성하러 가기</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </div>
+      </a>
+
+      <!-- 3: 'URL단축' 카드 및 버튼 (클릭 시 urlShort/index.html 연결) -->
+      <a href="urlShort/index.html" class="service-card" id="cardShort">
+        <div class="card-top">
+          <div class="card-icon-box">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+            </svg>
+          </div>
+          <h2 class="card-title">스마트 URL 단축기</h2>
+          <p class="card-desc">OpenAPI를 활용해 길고 복잡한 주소를 짧고 깔끔한 링크로 실시간 단축합니다.</p>
+          
+          <ul class="features-list">
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              입력 필드 기반 자동 버튼 활성화
+            </li>
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              OpenAPI 실시간 단축 및 읽기 전용 상자 표시
+            </li>
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              '복사하였습니다' 알림 & QR코드 즉시 연동
+            </li>
+          </ul>
+        </div>
+
+        <div class="card-btn btn-card-short">
+          <span>URL 단축하러 가기</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </div>
+      </a>
+
+    </section>
+
+    <!-- 인터랙티브 코기 마스코트 -->
+    <div class="corgi-companion" id="corgiHub" onclick="alert('QR코드 생성이나 URL 단축 중 원하는 버튼을 눌러줘 멍! 🐾')">
+      <div class="corgi-speech-bubble">
+        <span>어떤 기능이 필요해? 버튼을 눌러봐 멍! 🐾</span>
+      </div>
+      <div class="corgi-frame">
+        <img src="url2qr/corgi.jpg" alt="귀여운 마스코트" onerror="this.src='urlShort/corgi.jpg'">
+      </div>
+    </div>
+  </main>
+</body>
+</html>

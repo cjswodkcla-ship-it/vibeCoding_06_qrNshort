@@ -1,0 +1,864 @@
+/* ========================================================
+   밝고 따뜻한 웜 옐로우 & 크림 테마 (Warm Bright Palette)
+   ======================================================== */
+:root {
+  --bg-main: #fcf9f2;
+  --bg-gradient: radial-gradient(circle at 50% -10%, #fffbeb 0%, #fef7e6 45%, #f7f0e1 100%);
+  
+  --primary-color: #f59e0b;       /* 로고와 어울리는 앰버 옐로우 */
+  --primary-hover: #d97706;
+  --primary-glow: rgba(245, 158, 11, 0.35);
+  
+  --secondary-color: #fbbf24;
+  --accent-orange: #ea580c;
+  
+  --card-bg: rgba(255, 255, 255, 0.95);
+  --card-border: rgba(245, 158, 11, 0.18);
+  --card-border-hover: rgba(245, 158, 11, 0.45);
+  
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --text-dim: #94a3b8;
+  
+  --input-bg: #ffffff;
+  --input-border: #e2e8f0;
+  
+  --radius-xl: 24px;
+  --radius-lg: 18px;
+  --radius-md: 12px;
+  --radius-pill: 9999px;
+  
+  --transition-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--bg-main);
+  background-image: var(--bg-gradient);
+  color: var(--text-main);
+  font-family: 'Plus Jakarta Sans', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+  overflow-x: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ========================================================
+   배경 앰비언트 햇살 글로우
+   ======================================================== */
+.bg-glow {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.65;
+  animation: floatOrb 18s ease-in-out infinite alternate;
+}
+
+.bg-glow-1 {
+  width: 520px;
+  height: 520px;
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.45) 0%, transparent 70%);
+  top: -80px;
+  left: 20%;
+}
+
+.bg-glow-2 {
+  width: 480px;
+  height: 480px;
+  background: radial-gradient(circle, rgba(249, 115, 22, 0.28) 0%, transparent 70%);
+  bottom: -40px;
+  right: 15%;
+  animation-duration: 22s;
+  animation-delay: -5s;
+}
+
+.bg-glow-3 {
+  width: 360px;
+  height: 360px;
+  background: radial-gradient(circle, rgba(254, 240, 138, 0.5) 0%, transparent 70%);
+  top: 45%;
+  left: 55%;
+  animation-duration: 25s;
+  animation-delay: -10s;
+}
+
+@keyframes floatOrb {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(35px, 25px) scale(1.08); }
+  100% { transform: translate(-25px, -15px) scale(0.95); }
+}
+
+/* ========================================================
+   1. 헤더 & 로고 (상단 좌측)
+   ======================================================== */
+.app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 76px;
+  padding: 0 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(245, 158, 11, 0.15);
+  box-shadow: 0 4px 20px -2px rgba(245, 158, 11, 0.06);
+  z-index: 100;
+}
+
+.logo-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.25s ease;
+}
+
+.logo-wrapper:hover {
+  transform: translateY(-1px) scale(1.02);
+}
+
+.logo-img {
+  height: 44px;
+  width: auto;
+  max-width: 140px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 6px rgba(245, 158, 11, 0.25));
+}
+
+.logo-text {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #1e293b;
+}
+
+.logo-badge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #fff;
+  border-radius: var(--radius-pill);
+  letter-spacing: 0.05em;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
+}
+
+.header-tip {
+  font-size: 0.88rem;
+  color: #78716c;
+  font-weight: 500;
+  background: rgba(245, 158, 11, 0.08);
+  padding: 7px 16px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+/* 네비게이션 탭 버튼군 */
+.nav-menu-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(245, 158, 11, 0.08);
+  padding: 6px 8px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(245, 158, 11, 0.15);
+}
+
+.nav-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 18px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #64748b;
+  text-decoration: none;
+  border-radius: var(--radius-pill);
+  transition: all 0.25s ease;
+}
+
+.nav-tab-btn:hover {
+  color: #d97706;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.nav-tab-btn.active {
+  background: #ffffff;
+  color: #b45309;
+  box-shadow: 0 2px 10px rgba(245, 158, 11, 0.18);
+  font-weight: 700;
+}
+
+.nav-home-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: #64748b;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.nav-home-btn:hover {
+  background: rgba(255, 255, 255, 0.9);
+  color: #d97706;
+  transform: scale(1.05);
+}
+
+/* ========================================================
+   메인 레이아웃 & 전환 컨테이너
+   ======================================================== */
+.main-wrapper {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  min-height: 100vh;
+  padding-top: 76px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  overflow: hidden;
+}
+
+/* ========================================================
+   2. 입력창 영역 (초기: 정중앙 / 완료 시: 하단 이동)
+   ======================================================== */
+.input-stage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 640px;
+  padding: 0 24px;
+  transition: all 0.75s var(--transition-smooth);
+  z-index: 20;
+}
+
+.input-container-card {
+  text-align: center;
+  position: relative;
+}
+
+.input-header-text {
+  margin-bottom: 28px;
+  transition: opacity 0.4s ease, transform 0.4s ease, height 0.5s ease, margin 0.5s ease;
+  overflow: hidden;
+}
+
+.main-title {
+  font-size: 2.3rem;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.03em;
+  margin-bottom: 12px;
+  color: #1e293b;
+  text-shadow: 0 2px 10px rgba(245, 158, 11, 0.1);
+}
+
+.sub-title {
+  font-size: 1.05rem;
+  color: #64748b;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+/* 인풋 필드 래퍼 (Pill 디자인) */
+.input-pill-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border: 2px solid rgba(245, 158, 11, 0.25);
+  border-radius: var(--radius-pill);
+  padding: 8px 8px 8px 22px;
+  box-shadow: 0 16px 32px -6px rgba(245, 158, 11, 0.12),
+              0 4px 12px rgba(0, 0, 0, 0.03);
+  transition: all 0.3s ease;
+}
+
+.input-pill-wrapper:focus-within {
+  border-color: var(--primary-color);
+  box-shadow: 0 16px 36px -6px rgba(245, 158, 11, 0.25),
+              0 0 0 4px rgba(245, 158, 11, 0.18);
+}
+
+.input-icon {
+  display: flex;
+  align-items: center;
+  color: #f59e0b;
+  margin-right: 12px;
+  transition: transform 0.3s ease;
+}
+
+.input-pill-wrapper:focus-within .input-icon {
+  transform: scale(1.1);
+}
+
+.url-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 1.05rem;
+  color: #1e293b;
+  font-family: inherit;
+  padding: 10px 0;
+}
+
+.url-input::placeholder {
+  color: #94a3b8;
+  font-size: 0.95rem;
+}
+
+/* 텍스트 지우기 버튼 */
+.clear-btn {
+  background: #f1f5f9;
+  border: none;
+  color: #64748b;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-right: 8px;
+  transition: all 0.2s ease;
+}
+
+.clear-btn:hover {
+  background: #e2e8f0;
+  color: #1e293b;
+}
+
+/* 확인/제출 버튼 (따뜻한 골드 옐로우) */
+.submit-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  border-radius: var(--radius-pill);
+  border: none;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(245, 158, 11, 0.35);
+  transition: all 0.25s var(--transition-bounce);
+  white-space: nowrap;
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.5);
+  background: linear-gradient(135deg, #fbbf24 0%, #ea580c 100%);
+}
+
+.submit-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* 토스트 메시지 */
+.toast-message {
+  position: absolute;
+  bottom: -36px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.88rem;
+  color: #dc2626;
+  font-weight: 600;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  white-space: nowrap;
+}
+
+.toast-message.show {
+  opacity: 1;
+}
+
+/* ========================================================
+   3. QR 코드 중앙 표시 영역 (밝은 톤 카드)
+   ======================================================== */
+.qr-stage {
+  position: absolute;
+  top: calc(50% - 30px);
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.85);
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  transition: all 0.65s var(--transition-bounce);
+  z-index: 15;
+}
+
+.qr-card-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* QR 카드 뒷배경 펄스 링 */
+.qr-glow-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 340px;
+  height: 340px;
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.35) 0%, rgba(245, 158, 11, 0.15) 50%, transparent 75%);
+  filter: blur(35px);
+  pointer-events: none;
+  z-index: 0;
+  animation: pulseGlow 4s ease-in-out infinite alternate;
+}
+
+@keyframes pulseGlow {
+  0% { transform: translate(-50%, -50%) scale(0.92); opacity: 0.7; }
+  100% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
+}
+
+/* 화이트 프리미엄 QR 카드 */
+.qr-card {
+  position: relative;
+  z-index: 2;
+  background: var(--card-bg);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  box-shadow: 0 25px 50px -12px rgba(217, 119, 6, 0.15),
+              0 0 0 1px rgba(245, 158, 11, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.35s var(--transition-smooth);
+}
+
+.qr-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--card-border-hover);
+  box-shadow: 0 32px 60px -15px rgba(245, 158, 11, 0.28),
+              0 0 0 2px rgba(245, 158, 11, 0.25);
+}
+
+.qr-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+  max-width: 250px;
+}
+
+.qr-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+}
+
+.qr-url-preview {
+  font-size: 0.85rem;
+  color: #64748b;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* QR 코드 컨테이너 & 호버 오버레이 */
+.qr-display-box {
+  position: relative;
+  background: #ffffff;
+  width: 260px;
+  height: 260px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.12),
+              0 0 0 1px rgba(226, 232, 240, 0.8);
+  transition: transform 0.3s ease;
+}
+
+#qrcode {
+  width: 240px;
+  height: 240px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 내부 렌더링용 캔버스는 화면에서 숨김 */
+#qrcode canvas {
+  display: none !important;
+}
+
+/* 최종 QR 코드 이미지 1개만 화면에 선명하게 출력 */
+#qrcode img {
+  display: block !important;
+  width: 240px !important;
+  height: 240px !important;
+  border-radius: 4px;
+}
+
+.qr-hover-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(30, 41, 59, 0.85);
+  backdrop-filter: blur(4px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  color: #fff;
+  border-radius: var(--radius-lg);
+}
+
+.qr-card:hover .qr-hover-overlay {
+  opacity: 1;
+}
+
+.download-icon-box {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 18px rgba(245, 158, 11, 0.5);
+  transform: translateY(6px);
+  transition: transform 0.3s var(--transition-bounce);
+}
+
+.qr-card:hover .download-icon-box {
+  transform: translateY(0);
+}
+
+.overlay-text {
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+/* 카드 푸터 액션 버튼군 */
+.qr-card-footer {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.action-btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 11px 14px;
+  border-radius: var(--radius-md);
+  font-size: 0.88rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  transition: all 0.2s ease;
+}
+
+.download-btn {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #fff;
+  border: none;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
+}
+
+.download-btn:hover {
+  background: linear-gradient(135deg, #fbbf24 0%, #ea580c 100%);
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5);
+  transform: translateY(-1px);
+}
+
+.copy-btn {
+  background: #f8fafc;
+  color: #334155;
+  border-color: #cbd5e1;
+}
+
+.copy-btn:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+  transform: translateY(-1px);
+}
+
+.qr-hint {
+  margin-top: 14px;
+  font-size: 0.85rem;
+  color: #78716c;
+  text-align: center;
+  animation: fadeIn 0.8s ease;
+}
+
+/* ========================================================
+   4. 귀여운 웰시코기 인터랙티브 마스코트
+   ======================================================== */
+.corgi-companion {
+  position: fixed;
+  bottom: 30px;
+  right: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  z-index: 50;
+  user-select: none;
+  transition: transform 0.25s ease-out;
+}
+
+/* 귀여운 코기 말풍선 */
+.corgi-speech-bubble {
+  position: relative;
+  background: #ffffff;
+  color: #78350f;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 8px 20px -2px rgba(245, 158, 11, 0.2),
+              0 0 0 1.5px rgba(245, 158, 11, 0.35);
+  margin-bottom: 12px;
+  white-space: nowrap;
+  animation: floatBubble 3s ease-in-out infinite alternate;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.corgi-speech-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid #ffffff;
+}
+
+@keyframes floatBubble {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-5px); }
+}
+
+/* 웰시코기 본체 & 그림자 */
+.corgi-actor {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: corgiIdleBounce 2.5s ease-in-out infinite;
+  transform-origin: center bottom;
+  will-change: transform;
+}
+
+@keyframes corgiIdleBounce {
+  0%, 100% { transform: translateY(0) scale(1, 1); }
+  50% { transform: translateY(-8px) scale(0.98, 1.02); }
+}
+
+.corgi-frame {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid #ffffff;
+  box-shadow: 0 12px 28px -4px rgba(245, 158, 11, 0.3),
+              0 0 0 2px rgba(245, 158, 11, 0.25);
+  background: #fef3c7;
+  transition: transform 0.15s ease-out;
+}
+
+.corgi-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  transition: transform 0.2s ease-out;
+}
+
+.corgi-shadow {
+  width: 90px;
+  height: 14px;
+  background: rgba(245, 158, 11, 0.22);
+  border-radius: 50%;
+  filter: blur(4px);
+  margin-top: -6px;
+  animation: shadowPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes shadowPulse {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(0.85); opacity: 0.35; }
+}
+
+/* 코기 클릭 시 통통 튀는 애니메이션 */
+.corgi-companion.jump .corgi-actor {
+  animation: corgiJump 0.6s var(--transition-bounce) !important;
+}
+
+@keyframes corgiJump {
+  0% { transform: translateY(0) scale(1, 0.85); }
+  35% { transform: translateY(-28px) scale(0.9, 1.15) rotate(-6deg); }
+  70% { transform: translateY(-10px) scale(1.05, 0.95) rotate(4deg); }
+  100% { transform: translateY(0) scale(1, 1); }
+}
+
+/* ========================================================
+   5. 상태 전환 (QR 코드가 생성되었을 때)
+   ======================================================== */
+.main-wrapper.has-qr .qr-stage {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* 입력창이 화면 하단으로 내려감 */
+.main-wrapper.has-qr .input-stage {
+  top: auto;
+  bottom: 28px;
+  transform: translate(-50%, 0);
+  max-width: 580px;
+}
+
+/* 제목 영역은 부드럽게 축소 및 숨김 */
+.main-wrapper.has-qr .input-header-text {
+  opacity: 0;
+  height: 0;
+  margin-bottom: 0;
+  pointer-events: none;
+}
+
+/* 하단으로 이동한 입력창의 컴팩트 스타일 */
+.main-wrapper.has-qr .input-pill-wrapper {
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 16px 36px -8px rgba(245, 158, 11, 0.25),
+              0 0 0 1.5px rgba(245, 158, 11, 0.3);
+  padding: 6px 6px 6px 20px;
+}
+
+.main-wrapper.has-qr .submit-btn {
+  padding: 10px 22px;
+  font-size: 0.92rem;
+}
+
+/* 복사 성공 플래시 알림 */
+.copy-success {
+  background: #ecfdf5 !important;
+  border-color: #10b981 !important;
+  color: #059669 !important;
+}
+
+/* ========================================================
+   반응형 미디어 쿼리 (모바일 지원)
+   ======================================================== */
+@media (max-width: 768px) {
+  .app-header {
+    padding: 0 18px;
+    height: 64px;
+  }
+
+  .header-tip {
+    display: none;
+  }
+
+  .main-wrapper {
+    padding-top: 64px;
+  }
+
+  .main-title {
+    font-size: 1.65rem;
+  }
+
+  .sub-title {
+    font-size: 0.92rem;
+  }
+
+  .qr-card {
+    padding: 18px;
+  }
+
+  .qr-card-header {
+    max-width: 200px;
+  }
+
+  .main-wrapper.has-qr .input-stage {
+    bottom: 16px;
+    padding: 0 16px;
+  }
+
+  .submit-btn {
+    padding: 12px 20px;
+  }
+
+  /* 모바일에서 웰시코기는 우측 상단이나 하단 코너에 컴팩트하게 배치 */
+  .corgi-companion {
+    bottom: 90px;
+    right: 16px;
+  }
+
+  .corgi-frame {
+    width: 85px;
+    height: 85px;
+  }
+
+  .corgi-shadow {
+    width: 65px;
+    height: 10px;
+  }
+
+  .corgi-speech-bubble {
+    font-size: 0.75rem;
+    padding: 5px 10px;
+    margin-bottom: 6px;
+  }
+}
